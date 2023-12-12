@@ -19,8 +19,8 @@ class AuthentificationController extends Controller
     {
         $user_account = new User_Account;
         $validator=Validator::make($request->all(),[
-            // 'password' => [Password::min(8)->mixedCase()->numbers(),'required'],
-            // 'email' => ['email:rfc,dns','required'],
+            'password' => [Password::min(8)->mixedCase()->numbers(),'required'],
+            'email' => ['email:rfc,dns','required'],
         ]);
         if($validator->fails())
         {
