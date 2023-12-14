@@ -20,7 +20,7 @@ class RegistrationController extends Controller
         $document = new Document_storage;
 
         $validator=Validator::make($request->all(),[
-            'login'=>['unique:user_account,login','required'],
+            'login'=>['unique:user_account,login','required','min:8'],
             'password' => [Password::min(8)->mixedCase()->numbers(),'required'],
             'repeat_password' => ['same:password','required'],
             'phone' => ['size:12','required'],
