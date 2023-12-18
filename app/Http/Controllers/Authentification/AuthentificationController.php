@@ -20,7 +20,7 @@ class AuthentificationController extends Controller
         $user_account = new User_Account;
         $validator=Validator::make($request->all(),[
             'password' => [Password::min(8)->mixedCase()->numbers(),'required'],
-            'email' => ['email:rfc,dns','required'],
+            'login'=>['required','min:8'],
         ]);
         if($validator->fails())
         {
@@ -30,7 +30,7 @@ class AuthentificationController extends Controller
         }
         else
         {
-            if (!$request->email || !$request->password)
+            if (!$request->login || !$request->password)
             {
                 return response()->json([
                     'error'=>'Bad request'
@@ -38,14 +38,14 @@ class AuthentificationController extends Controller
             }
             else
             {
-                $user_account=$user_account::where('email',$request->email)->first();
-                if (User_account::where('email',$request->email)->count()==0 || $request->password!=Crypt::decryptString($user_account->password))
+                $user_account=$user_account::where('login',$request->login)->first();
+                if (User_account::where('login',$request->login)->count()==0 || $request->password!=Crypt::decryptString($user_account->password))
                 {
                     return response()->json([
                         'error'=>'User not found'
                     ]);
                 }
-                else if(User_account::where('email',$request->email)->count()>=0 && $request->password==Crypt::decryptString($user_account->password))
+                else if(User_account::where('login',$request->login)->count()>=0 && $request->password==Crypt::decryptString($user_account->password))
                 {
                     $user_account->tokens()->delete();
                     $token = $user_account->createToken('api-token');
